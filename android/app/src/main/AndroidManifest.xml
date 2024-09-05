@@ -2,7 +2,7 @@
     <application
         android:label="uplace"
         android:name="${applicationName}"
-        android:icon="@mipmap/uplace_app_icon_mini">
+        android:icon="@mipmap/icon_mini_uplace">
         <activity
             android:name=".MainActivity"
             android:exported="true"
