@@ -57,6 +57,45 @@ class _MyHomePageState extends State<MyHomePage> {
     _sellerController.addContext(context);
   }
 
+  void searchFilm() {
+    print(teste);
+  }
+
+  String teste = "";
+  Widget searchField() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: TextFormField(
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              labelText: "Nome do filme",
+              labelStyle: TextStyle(fontSize: 18),
+              border: OutlineInputBorder(),
+              fillColor: Colors.white,
+            ),
+            onChanged: (value) {
+              setState(() {
+                teste = value;
+              });
+            },
+          ),
+        ),
+        const SizedBox(width: 5),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: searchFilm,
+            child: const Text(
+              "Buscar",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
+          searchField(),
           CategoryMenu(
             onSelectedCategory: (String category) async {
               switch (category) {
