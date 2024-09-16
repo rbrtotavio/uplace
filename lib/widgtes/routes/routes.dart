@@ -10,6 +10,7 @@ import 'package:uplace/widgtes/pages/itempage.dart';
 import 'package:uplace/widgtes/pages/productspage.dart';
 import 'package:uplace/widgtes/pages/profilepage.dart';
 import 'package:uplace/widgtes/pages/registerpage.dart';
+import 'package:uplace/widgtes/pages/searchpage.dart';
 import 'package:uplace/widgtes/pages/sellerspage.dart';
 import 'package:uplace/widgtes/pages/servicespage.dart';
 import 'package:uplace/widgtes/pages/configspage.dart';
@@ -103,6 +104,17 @@ class RoutesFunctions {
           builder: (context) => ChatPage(
                 seller: seller,
               )),
+    );
+  }
+
+  static void gotoSearchPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchPage(
+          title: 'Uplace',
+        ),
+      ),
     );
   }
 

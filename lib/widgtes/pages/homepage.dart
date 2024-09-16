@@ -6,6 +6,7 @@ import 'package:uplace/widgtes/components/category_menu.dart';
 import 'package:uplace/widgtes/components/navigation_bar.dart';
 import 'package:uplace/widgtes/components/seller_card.dart';
 import 'package:uplace/widgtes/components/utils/error_alert.dart';
+import 'package:uplace/widgtes/routes/routes.dart';
 import 'package:uplace/widgtes/themes/colors.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -109,7 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
         )),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                RoutesFunctions.gotoSearchPage(
+                  context,
+                );
+              },
               icon: const Icon(
                 Icons.search,
                 size: 30,
@@ -173,11 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          //Expanded(child: NavigationUplaceBar())
         ],
       ),
-      bottomNavigationBar:
-          const NavigationUplaceBar(), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: const NavigationUplaceBar(),
     );
   }
 

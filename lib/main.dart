@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'uPlace',
       theme: uPlaceTheme,
       home: const LoginPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

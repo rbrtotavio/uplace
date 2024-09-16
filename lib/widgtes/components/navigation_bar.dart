@@ -11,7 +11,6 @@ class NavigationUplaceBar extends StatelessWidget {
       backgroundColor: AppColors.blueUplace,
       selectedItemColor: AppColors.greenUplace,
       unselectedItemColor: AppColors.greenUplace,
-      // Estilo do texto quando não selecionado
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -26,7 +25,6 @@ class NavigationUplaceBar extends StatelessWidget {
           label: 'Perfil',
         )
       ],
-
       onTap: (index) {
         switch (index) {
           case 0:
