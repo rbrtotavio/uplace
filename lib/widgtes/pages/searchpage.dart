@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uplace/controller/implementations/itemController.dart';
 import 'package:uplace/controller/implementations/sellerController.dart';
 import 'package:uplace/models/seller.dart';
 import 'package:uplace/widgtes/components/category_menu.dart';
@@ -16,6 +17,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final ItemController _itemController = ItemController();
   get sellerCards => null;
 
   @override
@@ -40,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             onChanged: (value) {
               setState(() {
-                print(value);
+                searchItem(value);
               });
             },
           ),
@@ -120,8 +122,10 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void searchItem() {
-    print(teste);
+  void searchItem(query) async {
+    var items = await _itemController.getSearchedItems(query);
+    print(items![0]);
+    print(items != null ? items.length : 0);
   }
 
   Future<List<Seller>?> getFoodsResults() async {}
