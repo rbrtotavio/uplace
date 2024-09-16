@@ -17,4 +17,15 @@ class ItemService extends BaseService {
 
     return items;
   }
+
+  Future<List<Item>?> getSearchedItems(String query) async {
+    var items = await _itemRepository.getSearchedItems(query);
+
+    if (items == null || items.isEmpty) {
+      setError("Não foi encontrado itens");
+      return null;
+    }
+
+    return items;
+  }
 }

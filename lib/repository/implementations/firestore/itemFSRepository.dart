@@ -24,9 +24,9 @@ class ItemFSRepository extends ItemRepositoryInterface {
 
   @override
   Future<List<Item>?> getAllItems() async {
-    var sellerItemsDocs = await db.get();
+    var itemsDocs = await db.get();
     List<Item> items = [];
-    for (var doc in sellerItemsDocs.docs) {
+    for (var doc in itemsDocs.docs) {
       items.add(
         Item.FromFirebase(
           doc.data() as Map<String, dynamic>,
@@ -40,15 +40,15 @@ class ItemFSRepository extends ItemRepositoryInterface {
 
   @override
   Future<List<Item>?> getSellerItems(String sellerId) async {
-    var sellerItemsDocs = await db
+    var itemsDocs = await db
         .where(
           "sellerId",
           isEqualTo: sellerId,
         )
         .get();
-    List<Item> sellerItems = [];
-    for (var doc in sellerItemsDocs.docs) {
-      sellerItems.add(
+    List<Item> items = [];
+    for (var doc in itemsDocs.docs) {
+      items.add(
         Item.FromFirebase(
           doc.data() as Map<String, dynamic>,
           doc.id,
@@ -56,7 +56,25 @@ class ItemFSRepository extends ItemRepositoryInterface {
       );
     }
 
-    return sellerItems;
+    return items;
+  }
+
+  @override
+  Future<List<Item>?> getSearchedItems(String query) async {
+    var itemsDocs = await db.get();
+    List<Item> items = [];
+    for (var doc in itemsDocs.docs) {
+      var item = Item.FromFirebase(
+        doc.data() as Map<String, dynamic>,
+        doc.id,
+      );
+
+      if (item.name.contains(query) || item.description.contains(query)) {
+        items.add(item);
+      }
+    }
+
+    return items;
   }
 
   @override

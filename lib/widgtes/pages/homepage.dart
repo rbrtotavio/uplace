@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          searchField(),
+          // searchField(),
           CategoryMenu(
             onSelectedCategory: (String category) async {
               switch (category) {

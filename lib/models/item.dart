@@ -71,6 +71,6 @@ class Item {
         'title: $name, '
         'description: $description, '
         'price: $price, '
-        'category: $catName,';
+        'category: $catName)';
   }
 }

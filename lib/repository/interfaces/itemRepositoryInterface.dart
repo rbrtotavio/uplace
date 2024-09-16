@@ -5,4 +5,5 @@ abstract class ItemRepositoryInterface extends BaseRepository {
   Future<List<Item>?> getSellerItems(String sellerId);
   Future<List<Item>?> getAllItems();
   void insertItem(Item item);
+  Future<List<Item>?> getSearchedItems(String query);
 }
