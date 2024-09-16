@@ -16,6 +16,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  get sellerCards => null;
+
   @override
   void initState() {
     super.initState();
@@ -30,14 +32,15 @@ class _SearchPageState extends State<SearchPage> {
           child: TextFormField(
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
-              labelText: "Nome do filme",
-              labelStyle: TextStyle(fontSize: 18),
-              border: OutlineInputBorder(),
+              labelText: "Nome da loja",
+              labelStyle: TextStyle(fontSize: 18, fontFamily: 'clarissans'),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50))),
               fillColor: Colors.white,
             ),
             onChanged: (value) {
               setState(() {
-                teste = value;
+                print(value);
               });
             },
           ),
@@ -53,68 +56,63 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: AppColors.blueUplace,
         leading: Container(),
         title: Center(
-            child: Text(
-          widget.title,
-          style: const TextStyle(color: AppColors.greenUplace),
-        )),
+          child: Text(
+            widget.title,
+            style: const TextStyle(color: AppColors.greenUplace),
+          ),
+        ),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                size: 30,
-                color: AppColors.greenUplace,
-              ))
+            onPressed: () {},
+            icon: const Icon(
+              Icons.search,
+              size: 30,
+              color: AppColors.greenUplace,
+            ),
+          )
         ],
       ),
       body: Column(
         children: [
-          searchField(),
-          CategoryMenu(
-            onSelectedCategory: (String category) async {
-              switch (category) {
-                case "Alimentos":
-                  break;
-                case "Produtos":
-                  break;
-                case "Serviços":
-                  break;
-                default:
-              }
-              setState(() {});
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: searchField(),
           ),
-          const Expanded(
-            flex: 2,
-            child: SizedBox(),
-          ),
-          Expanded(
-            flex: 6,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FutureBuilder<List<Seller>?>(
-                      future: sellerCards,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          List<Seller> sellers = snapshot.data!;
-                          return Column(
-                            children: List.generate(
-                              sellers.length,
-                              (index) {
-                                return SellerCard(seller: sellers[index]);
-                              },
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          // TODO: Adicionar indicacao de erro
-                          print('${snapshot.error}');
-                        }
-                        return CircularProgressIndicator();
-                      }),
-                ],
-              ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Categorias",
+                    style: TextStyle(
+                      fontFamily: 'clarissans',
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Proximidade",
+                    style: TextStyle(
+                      fontFamily: 'clarissans',
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Local",
+                    style: TextStyle(
+                      fontFamily: 'clarissans',
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
