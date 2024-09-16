@@ -39,13 +39,11 @@ class SellerService extends BaseService {
     return sellers;
   }
 
-  Future<List<Item>?> getSellerItems(String sellerId) async {
-    var items = await _sellerRepository.getSellerItems(sellerId);
-    if (items == null || items.isEmpty) {
-      setError("Não foi possível obter os itens do vendendor");
-      return null;
-    }
-
-    return items;
-  }
+  // Future<void> migrate() async {
+  //   var items = await _sellerRepository.getAllSellerItems();
+  //   for (var item in items!) {
+  //     _itemRepository.insertItem(item);
+  //   }
+  //   print('ok');
+  // }
 }

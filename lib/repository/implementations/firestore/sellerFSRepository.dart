@@ -70,16 +70,36 @@ class SellerFSRepository extends SellerRepositoryInterface {
     return sellers;
   }
 
-  @override
-  Future<List<Item>?> getSellerItems(String sellerId) async {
-    var sellerItemsDocs = await db.doc(sellerId).collection("items").get();
-    List<Item> sellerItems = [];
-    sellerItemsDocs.docs.forEach(
-      (doc) => sellerItems.add(
-        Item.FromFirebase(doc.data(), doc.id),
-      ),
-    );
+  // @override
+  // Future<List<Item>?> getSellerItems(String sellerId) async {
+  //   var sellerItemsDocs = await db.doc(sellerId).collection("items").get();
+  //   List<Item> sellerItems = [];
+  //   sellerItemsDocs.docs.forEach(
+  //     (doc) => sellerItems.add(
+  //       Item.FromFirebase(doc.data(), doc.id),
+  //     ),
+  //   );
 
-    return sellerItems;
-  }
+  //   return sellerItems;
+  // }
+
+  // @override
+  // Future<List<Item>?> getAllSellerItems() async {
+  //   List<Item> sellersItems = [];
+
+  //   var sellersDocs = await db.get();
+  //   List<Seller> sellers = [];
+  //   sellersDocs.docs.forEach(
+  //     (doc) => sellers.add(
+  //       Seller.FromFirebase(doc.data()! as Map<String, dynamic>, doc.id),
+  //     ),
+  //   );
+
+  //   for (Seller seller in sellers) {
+  //     var items = await getSellerItems(seller.id);
+  //     sellersItems.addAll(items!);
+  //   }
+
+  //   return sellersItems;
+  // }
 }

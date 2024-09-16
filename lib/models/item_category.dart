@@ -1,7 +1,8 @@
 enum ItemCategory {
   food,
   product,
-  service;
+  service,
+  item;
 
   String get name {
     switch (this) {
@@ -12,7 +13,7 @@ enum ItemCategory {
       case service:
         return 'Serviço';
       default:
-        return 'Comida';
+        return 'Item';
     }
   }
 }
