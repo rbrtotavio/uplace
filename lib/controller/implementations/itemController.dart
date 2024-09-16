@@ -9,8 +9,11 @@ class ItemController extends BaseController {
 
   ItemController();
 
-  Future<List<Item>?> getSearchedItems(String query) {
-    var items = _itemService.getSearchedItems(query);
-    return items;
+  Future<Response> getSearchedItems(String query) async {
+    var validate = await validateLogedUser();
+    if (!validate) {
+      return awnser(null);
+    }
+    return awnser(await _itemService.getSearchedItems(query));
   }
 }

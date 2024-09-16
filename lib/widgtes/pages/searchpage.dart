@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:uplace/controller/implementations/itemController.dart';
 import 'package:uplace/controller/implementations/sellerController.dart';
+import 'package:uplace/models/item.dart';
+import 'package:uplace/models/item_category.dart';
 import 'package:uplace/models/seller.dart';
+import 'package:uplace/widgtes/components/category_menu.dart';
+import 'package:uplace/widgtes/components/fllters.dart';
+import 'package:uplace/widgtes/components/sellers_item.dart';
+import 'package:uplace/widgtes/components/utils/error_alert.dart';
+import 'package:uplace/widgtes/routes/routes.dart';
 import 'package:uplace/widgtes/themes/colors.dart';
 
 class SearchPage extends StatefulWidget {
@@ -15,25 +22,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final ItemController _itemController = ItemController();
-
-  final List<String> characteristics = [
-    "Alimentos",
-    "Eletrônicos",
-    "Vestuário",
-    "Serviços",
-    "Móveis",
-    "Beleza",
-    "Esportes",
-    "Automóveis",
-    "Brinquedos",
-  ];
-
-  final List<String> locations = ["CEAGRI", "CEGOE", "R.U."];
-
-  final List<bool> _isSelectedCharacteristics = List.filled(9, false);
-  final List<bool> _isSelectedLocations = List.filled(3, false);
-
-  double _proximity = 5.0;
+  // List<Item>? itemsToPresent = [];
+  List<Item>? items = [];
+  ItemCategory presentedCategory = ItemCategory.food;
+  String query = "";
 
   @override
   void initState() {
@@ -48,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextFormField(
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
-              labelText: "Nome da loja",
+              labelText: "O que deseja procurar encontrar?",
               labelStyle: TextStyle(fontSize: 18, fontFamily: 'clarissans'),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
@@ -56,7 +48,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
             onChanged: (value) {
               setState(() {
-                searchItem(value);
+                query = value;
+                searchItem();
               });
             },
           ),
@@ -90,132 +83,92 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: searchField(),
+          searchField(),
+          const Filters(),
+          CategoryMenu(
+            onSelectedCategory: (String category) async {
+              switch (category) {
+                case "Alimentos":
+                  presentedCategory = ItemCategory.food;
+                  break;
+                case "Produtos":
+                  presentedCategory = ItemCategory.product;
+                  break;
+                case "Serviços":
+                  presentedCategory = ItemCategory.service;
+                  break;
+                default:
+              }
+              setState(() {
+                switchCategory();
+              });
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Categorias",
-                    style: TextStyle(
-                      fontFamily: 'clarissans',
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 8.0,
-                  children: List.generate(characteristics.length, (index) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _isSelectedCharacteristics[index] =
-                              !_isSelectedCharacteristics[index];
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _isSelectedCharacteristics[index]
-                            ? AppColors.greenUplace
-                            : Colors.grey[300],
-                        foregroundColor: _isSelectedCharacteristics[index]
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      child: Text(characteristics[index]),
-                    );
-                  }),
-                ),
-                const SizedBox(height: 16),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Proximidade",
-                    style: TextStyle(
-                      fontFamily: 'clarissans',
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                Row(
+          Expanded(
+            child: Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
                   children: [
-                    Expanded(
-                      child: Slider(
-                        value: _proximity,
-                        min: 1.0,
-                        max: 10.0,
-                        divisions: 9,
-                        label: "${_proximity.toInt()} km",
-                        onChanged: (value) {
-                          setState(() {
-                            _proximity = value;
-                          });
-                        },
-                      ),
-                    ),
-                    Text(
-                      "${_proximity.toInt()} km",
-                      style: const TextStyle(fontSize: 18),
-                    ),
+                    FutureBuilder<List<Item>?>(
+                      future: searchItem(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          items = snapshot.data!;
+                          switchCategory();
+                          return Column(
+                            children: List.generate(
+                              items != null ? items!.length : 0,
+                              (index) {
+                                return GestureDetector(
+                                    onTap: () async {
+                                      if (items != null) {
+                                        navigateToItem(items![index]);
+                                      }
+                                    },
+                                    child: SellersItem(item: items![index]));
+                              },
+                            ),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          // TODO: Adicionar indicacao de erro
+                          print('${snapshot.error}');
+                        }
+                        return SizedBox();
+                      },
+                    )
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Local",
-                    style: TextStyle(
-                      fontFamily: 'clarissans',
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 8.0,
-                  children: List.generate(locations.length, (index) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _isSelectedLocations[index] =
-                              !_isSelectedLocations[index];
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _isSelectedLocations[index]
-                            ? AppColors.greenUplace
-                            : Colors.grey[300],
-                        foregroundColor: _isSelectedLocations[index]
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      child: Text(locations[index]),
-                    );
-                  }),
-                ),
-              ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
   }
 
-  void searchItem(query) async {
-    var items = await _itemController.getSearchedItems(query);
-    print(items![0]);
-    print(items != null ? items.length : 0);
+  Future<List<Item>?> searchItem() async {
+    if (query.isEmpty) {
+      return null;
+    }
+
+    var response = await _itemController.getSearchedItems(query);
+    if (response.isValid) {
+      List<Item> items = response.data as List<Item>;
+      return items;
+    } else {
+      return null;
+    }
   }
 
-  Future<List<Seller>?> getFoodsResults() async {}
+  void navigateToItem(Item item) async {
+    print(item);
+  }
 
-  Future<List<Seller>?> getProductResults() async {}
-
-  Future<List<Seller>?> getServiceResults() async {}
+  switchCategory() {
+    items = items?.where((p) => p.category == presentedCategory).toList();
+  }
 }

@@ -3,10 +3,12 @@ import 'package:uplace/widgtes/routes/routes.dart';
 import 'package:uplace/widgtes/themes/colors.dart';
 
 class CategoryMenu extends StatefulWidget {
-
   final Function(String) onSelectedCategory;
 
-  const CategoryMenu({super.key, required this.onSelectedCategory,});
+  const CategoryMenu({
+    super.key,
+    required this.onSelectedCategory,
+  });
 
   @override
   State<CategoryMenu> createState() => _CategoryMenuState();
@@ -16,22 +18,19 @@ class _CategoryMenuState extends State<CategoryMenu> {
   String selectedCategory = "Alimentos";
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Flex(
-        direction: Axis.horizontal,
-        children: [
-          Expanded(
-            child: categoryMenuTextButton("Alimentos"),
-          ),
-          Expanded(
-            child: categoryMenuTextButton("Produtos"),
-          ),
-          Expanded(
-            child: categoryMenuTextButton("Serviços"),
-          )
-        ],
-      ),
+    return Flex(
+      direction: Axis.horizontal,
+      children: [
+        Expanded(
+          child: categoryMenuTextButton("Alimentos"),
+        ),
+        Expanded(
+          child: categoryMenuTextButton("Produtos"),
+        ),
+        Expanded(
+          child: categoryMenuTextButton("Serviços"),
+        )
+      ],
     );
   }
 
