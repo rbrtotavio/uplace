@@ -26,6 +26,10 @@ class _ProfilePageState extends State<ProfilePage> {
     getConsumer();
   }
 
+  // migrate() {
+  //   _consumerController.migrate();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +75,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: 360,
                       height: 60,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // migrate();
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 AppColors.blueUplace, // Cor de fundo do botão
