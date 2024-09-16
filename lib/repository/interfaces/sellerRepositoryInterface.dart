@@ -6,5 +6,6 @@ abstract class SellerRepositoryInterface extends BaseRepository {
   Future<List<Seller>?> getFoodSellers();
   Future<List<Seller>?> getProductSellers();
   Future<List<Seller>?> getServiceSellers();
-  Future<List<Item>?> getSellerItems(String sellerId);
+  // Future<List<Item>?> getSellerItems(String sellerId);
+  // Future<List<Item>?> getAllSellerItems();
 }

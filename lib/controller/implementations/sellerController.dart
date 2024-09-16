@@ -1,9 +1,11 @@
+import 'package:uplace/application/services/implementations/itemService.dart';
 import 'package:uplace/application/services/implementations/sellerService.dart';
 import 'package:uplace/controller/baseController.dart';
 import 'package:uplace/controller/handling/response.dart';
 
 class SellerController extends BaseController {
   final SellerService _sellerService = SellerService();
+  final ItemService _itemService = ItemService();
 
   SellerController();
 
@@ -36,6 +38,6 @@ class SellerController extends BaseController {
     if (!validate) {
       return awnser(null);
     }
-    return awnser(await _sellerService.getSellerItems(sellerId));
+    return awnser(await _itemService.getSellerItems(sellerId));
   }
 }
