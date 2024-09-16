@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uplace/controller/implementations/itemController.dart';
 import 'package:uplace/controller/implementations/sellerController.dart';
 import 'package:uplace/models/seller.dart';
-import 'package:uplace/widgtes/components/category_menu.dart';
-import 'package:uplace/widgtes/components/seller_card.dart';
-import 'package:uplace/widgtes/components/utils/error_alert.dart';
 import 'package:uplace/widgtes/themes/colors.dart';
 
 class SearchPage extends StatefulWidget {
@@ -18,14 +15,31 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final ItemController _itemController = ItemController();
-  get sellerCards => null;
+
+  final List<String> characteristics = [
+    "Alimentos",
+    "Eletrônicos",
+    "Vestuário",
+    "Serviços",
+    "Móveis",
+    "Beleza",
+    "Esportes",
+    "Automóveis",
+    "Brinquedos",
+  ];
+
+  final List<String> locations = ["CEAGRI", "CEGOE", "R.U."];
+
+  final List<bool> _isSelectedCharacteristics = List.filled(9, false);
+  final List<bool> _isSelectedLocations = List.filled(3, false);
+
+  double _proximity = 5.0;
 
   @override
   void initState() {
     super.initState();
   }
 
-  String teste = "";
   Widget searchField() {
     return Row(
       children: [
@@ -80,11 +94,12 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.all(8.0),
             child: searchField(),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Categorias",
@@ -94,7 +109,31 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 ),
-                Align(
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8.0,
+                  children: List.generate(characteristics.length, (index) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _isSelectedCharacteristics[index] =
+                              !_isSelectedCharacteristics[index];
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isSelectedCharacteristics[index]
+                            ? AppColors.greenUplace
+                            : Colors.grey[300],
+                        foregroundColor: _isSelectedCharacteristics[index]
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      child: Text(characteristics[index]),
+                    );
+                  }),
+                ),
+                const SizedBox(height: 16),
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Proximidade",
@@ -104,7 +143,30 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 ),
-                Align(
+                Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                        value: _proximity,
+                        min: 1.0,
+                        max: 10.0,
+                        divisions: 9,
+                        label: "${_proximity.toInt()} km",
+                        onChanged: (value) {
+                          setState(() {
+                            _proximity = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Text(
+                      "${_proximity.toInt()} km",
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Local",
@@ -113,6 +175,29 @@ class _SearchPageState extends State<SearchPage> {
                       fontSize: 24,
                     ),
                   ),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8.0,
+                  children: List.generate(locations.length, (index) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _isSelectedLocations[index] =
+                              !_isSelectedLocations[index];
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isSelectedLocations[index]
+                            ? AppColors.greenUplace
+                            : Colors.grey[300],
+                        foregroundColor: _isSelectedLocations[index]
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      child: Text(locations[index]),
+                    );
+                  }),
                 ),
               ],
             ),
