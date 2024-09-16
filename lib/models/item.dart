@@ -31,14 +31,14 @@ class Item {
   factory Item.FromFirebase(Map<String, dynamic> json, String id) {
     var category = ItemCategory.food;
     switch (json["category"]) {
-      case 0:
+      case "Comida":
         category = ItemCategory.food;
-      case 1:
+      case "Produto":
         category = ItemCategory.product;
-      case 2:
+      case "Serviço":
         category = ItemCategory.service;
       default:
-        category = ItemCategory.food;
+        category = ItemCategory.item;
     }
     return Item(
       name: json["name"],
